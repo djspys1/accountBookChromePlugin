@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <link href="app.css" rel="stylesheet" media="screen">
+  <script src="math.js"></script>
+  <script src="axios.js"></script>
+  <script src="vue.min.js"></script>
+</head>
+<body>
+<div id="app">
+  <div class="content">
+    <div class="symbol">
+      <div class="symbol-detail title">
+        <div class="symbol-price detail dropdown">
+          {{currentType}}<span class="icon_more"></span>
+          <div class="dropdown-content">
+            <p class="dropdown-content-item" @click="changeCurrentType(type)" v-for="(type, index) in currencyLists"
+               :key="index">{{type}}</p>
+          </div>
+        </div>
+        <div class="symbol-name detail">价格</div>
+        <div class="symbol-price detail">数量</div>
+        <div class="symbol-price detail dropdown">
+          {{priceType.name}}<span class="icon_more"></span>
+          <div class="dropdown-content">
+            <p class="dropdown-content-item" @click="changePriceType(type)" v-for="(type, index) in priceTypes"
+               :key="index">{{type.name}}</p>
+          </div>
+        </div>
+        <div class="symbol-total detail">合计</div>
+        <div class="detail">
+        </div>
+      </div>
+      <div class="symbol-detail-content">
+        <div v-for="(item, i) in lists" :class="getColor(item)" class="symbol-detail detail">
+          <div class="symbol-name detail">{{item.type}}</div>
+          <div class="symbol-name detail">{{item.price}}</div>
+          <div class="symbol-price detail">{{item.amount}}</div>
+          <div class="symbol-price detail">{{item.direction === 1 ? '买入' : '卖出'}}</div>
+          <div class="symbol-total detail">{{item.total}}</div>
+          <div class="detail">
+            <div class="button" @click="deleteItem(item)">删除</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="total">
+      <div v-if="showMore.includes('buyTotalPrice')" class="total-item">买入总金额: {{totalPrice.buyTotalPrice | priceNumber}}</div>
+      <div v-if="showMore.includes('buyTotalAmount')" class="total-item">买入总数量: {{totalPrice.buyTotalAmount}}</div>
+      <div v-if="showMore.includes('buyAveragePrice')" class="total-item">买入平均价: {{totalPrice.buyAveragePrice | priceNumber}}</div>
+      <div v-if="showMore.includes('sellTotalPrice')" class="total-item">卖出总金额: {{totalPrice.sellTotalPrice | priceNumber}}</div>
+      <div v-if="showMore.includes('sellTotalAmount')" class="total-item">卖出总数量: {{totalPrice.sellTotalAmount}}</div>
+      <div v-if="showMore.includes('sellAveragePrice')" class="total-item">卖出平均价: {{totalPrice.sellAveragePrice | priceNumber}}</div>
+      <div v-if="showMore.includes('profit')" class="total-item">总盈利: {{totalPrice.profit | priceNumber}}</div>
+      <div v-if="showMore.includes('currentAmount')" class="total-item">当前持仓数量: {{totalPrice.currentAmount}}</div>
+      <div v-if="showMore.includes('currentAveragePrice')" class="total-item">当前持仓价: {{totalPrice.currentAveragePrice | priceNumber}}</div>
+    </div>
+    <div class="add">
+      <button class="add-type-button" @click="changeAddType">上传方式</button>
+      <div v-if="addType === 1" class="add-by-text">
+        <input type="text" v-model="dealFor.type" placeholder="币种" class="add-input"/>
+        <input type="number" required v-model="dealFor.price" placeholder="价格" class="add-input"/>
+        <input type="number" required v-model="dealFor.amount" placeholder="数量" class="add-input"/>
+        <select v-model="dealFor.direction">
+          <option :value="1">买入</option>
+          <option :value="2">卖出</option>
+        </select>
+        <div class="button" @click="add">确定</div>
+      </div>
+      <div v-if="addType === 2" class="add-by-input">
+        <input type="file" @change="jsReadFiles"/>
+      </div>
+      <div v-if="addType === 3" class="add-by-api">
+        <input type="text" placeholder="api_key" class="add-input add-input-api"/>
+        <div class="button" @click="add">获取</div>
+      </div>
+
+    </div>
+  </div>
+
+  <div v-if="errMessage" class="error">
+    <div class="error-content">{{errMessage}}</div>
+  </div>
+</div>
+</body>
+<script src="popup.js"></script>
+</html>

@@ -1,0 +1,29 @@
+{
+  "name": "Account book",
+  "version": "1.0",
+  "description": "Account book",
+  "permissions": [
+    "storage",
+    "declarativeContent",
+    "debugger",
+    "activeTab", "notifications",
+    "webRequest",
+    "webRequestBlocking",
+    "https://*/"
+  ],
+  "background": {
+    "scripts": ["vue.min.js", "pako.js", "axios.js", "math.js"]
+  },
+  "browser_action": {
+    "default_icon": "images/icon64.png",
+    "default_popup": "popup.html"
+  },
+  "icons": {
+    "16": "images/icon16.png",
+    "32": "images/icon32.png",
+    "48": "images/icon64.png",
+    "128": "images/icon128.png"
+  },
+  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
+  "manifest_version": 2
+}
